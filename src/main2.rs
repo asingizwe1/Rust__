@@ -10,7 +10,7 @@ fn main() {
     println!("Hello from the main thread.");
     t1.join().unwrap(); //join takes ownership of thread
     t2.join().unwrap(); //you've consumed t2
-}
+} //join to ensure that the thread completes
 fn f() {
     println!("another thread");
     let id = thread::current().id();

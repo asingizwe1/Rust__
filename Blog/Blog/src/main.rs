@@ -20,11 +20,13 @@ async fn greet(req: HttpRequest) -> impl Responder {
     let name = req.match_info().get("name").unwrap_or("World");
     format!("Hello {}!", &name)
 }
-#[tokio::main]
+#[tokio::main] //launch your asynchronous runtime at the top of your main function and then use it to drive your futures to completion.
 async fn main() -> std::io::Result<()> {
     //asynchronous based on future trait
     //main is asynchronous coz HttpServer::run is an asynchronous method
+    //why the closure | | -> “Whenever you need a new App, call this little function. It doesn’t take any arguments, but it will hand you a fresh App every time.”
     HttpServer::new(|| {
+        //(| | {})
         //HttpServer::run() starts listening for incoming connections.
         //server(backbone)
         //app is a builder pattern
