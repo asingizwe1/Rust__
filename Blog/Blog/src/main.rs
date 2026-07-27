@@ -15,11 +15,19 @@ So that I can receive email updates when new content is published on the blog.
 //actix-web go to rust frame work for rust production
 
 //receive get request for /health_check and we want to return 200 Ok with no body
-use actix_web::{web, App, HttpRequest, HttpServer, Responder};
-async fn greet(req: HttpRequest) -> impl Responder {
-    let name = req.match_info().get("name").unwrap_or("World");
-    format!("Hello {}!", &name)
-}
+use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+// async fn greet(req: HttpRequest) -> impl Responder {
+//     let name = req.match_info().get("name").unwrap_or("World");
+//     format!("Hello {}!", &name)
+//
+
+//all web framework functions of actix are asynchronous
+//t Responder is nothing more than a conversion trait into a HttpResponse. (anything that can be turned into an HTTP response)
+//request handler mimicking greet
+async fn health_check(_req: HttpRequest) -> impl Responder {
+    HttpResponse::Ok().finish() //finish give us an http response with an empty body
+} //gives HttpResponseBuilder. primed with 200 Ok and empty body by defqault
+
 #[tokio::main] //launch your asynchronous runtime at the top of your main function and then use it to drive your futures to completion.
 async fn main() -> std::io::Result<()> {
     //asynchronous based on future trait
@@ -31,13 +39,17 @@ async fn main() -> std::io::Result<()> {
         //server(backbone)
         //app is a builder pattern
         App::new() //component takes incoming request as input and spits out a response
-            .route("/", web::get().to(greet))
-            //route method helps us add new end point to our app
             .route(
-                "/{name}",
-                web::get() //the request should bepassed to the handler if and only if its HTTP method is GET. You can start to picture what happens when a new request come
-                    .to(greet),
+                "/health_check", //path to url
+                web::get() //(If someone sends a POST request to /health_check, this route won’t trigger.)//only match if HTTp method is Get
+                    .to(health_check), //Specifies the handler function to run when the route matches. In this case
             )
+        //route method helps us add new end point   (rule for handling requests)   to our app
+        // .route(
+        //     "/{name}",
+        //     web::get() //the request should bepassed to the handler if and only if its HTTP method is GET. You can start to picture what happens when a new request come
+        //         .to(greet),
+        // )
     })
     .bind("127.0.0.1:8000")? //takes care of where app should be listening
     .run()
