@@ -21,4 +21,10 @@ fn main() {
     //pointer of smart pointer box, lives on the stack but actual value lives on heap
     //when box goes out of scope rust automatically drops it
     {
-        let b = Box::new(42); // heap allocati
+        let b = Box::new(42); // heap allocation
+                              // b points to 42 on the heap
+    } // b goes out of scope → memory freed
+    t1.join().unwrap();
+    t2.join().unwrap();
+} /*let x: &'static i32 = Box::leak(Box::new(42));
+  // x is a reference that will live until program ends */

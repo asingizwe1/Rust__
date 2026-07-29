@@ -1,7 +1,8 @@
 [package]
-name = "Blog"
+name = "zero2prod"
 version = "0.1.0"
-edition = "2024"
+authors = ["Louis A <contact@lpalmieri.com>"]
+edition = "2021"
 
 [dependencies]
 actix-web = "4"

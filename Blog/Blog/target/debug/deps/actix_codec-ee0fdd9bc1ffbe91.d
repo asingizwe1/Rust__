@@ -1,0 +1,10 @@
+C:\Users\Administrator\hello\zero2prod\Blog\Blog\target\debug\deps\actix_codec-ee0fdd9bc1ffbe91.d: C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lib.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\bcodec.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\framed.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lines.rs
+
+C:\Users\Administrator\hello\zero2prod\Blog\Blog\target\debug\deps\libactix_codec-ee0fdd9bc1ffbe91.rlib: C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lib.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\bcodec.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\framed.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lines.rs
+
+C:\Users\Administrator\hello\zero2prod\Blog\Blog\target\debug\deps\libactix_codec-ee0fdd9bc1ffbe91.rmeta: C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lib.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\bcodec.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\framed.rs C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lines.rs
+
+C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lib.rs:
+C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\bcodec.rs:
+C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\framed.rs:
+C:\Users\Administrator\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\actix-codec-0.5.2\src\lines.rs:

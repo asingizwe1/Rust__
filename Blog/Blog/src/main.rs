@@ -92,3 +92,7 @@ Path must be / (no extra segments).
 Method must be GET.
 
 If both match, call the greet handler. */
+
+//API-> a tool exposed to the outside world to perform some kind of task
+//WHAT COULD GO WRONG WITH AN API
+//black box testing: we verify the behaviour of a system by examining its output given a set of inputs without having access to the details of its internal implementation.
