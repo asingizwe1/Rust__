@@ -1,5 +1,5 @@
 [package]
-name = "zero2prod"
+name = "zero2prod"                            #crate name
 version = "0.1.0"
 authors = ["Louis A <contact@lpalmieri.com>"]
 edition = "2021"
