@@ -99,5 +99,48 @@
 use zero2prod::run;
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    run().await
-}
+    // Bubble up the io::Error if we failed to bind the address
+    // Otherwise call .await on our Server
+    run()?.await //“Drive this future until it’s finished.” pause here until the future finishes. server future never finishes, your program stays here forever.
+//But the server future never finishes on its own. It keeps looping, waiting for requests.
+                 // the server should stay alive, keep handling requests, and not exit after one request
+/**NOTE
+ * .await here means: your program will sit here forever, serving requests, until you kill the process.
+ * 
+ * 
+ * 
+ * You call run()?.await.
+
+The server future is driven until completion.
+
+But since a server never naturally completes, the runtime stays blocked here forever.
+
+That’s exactly what you want: the app keeps listening for requests until you kill it.
+ * 
+ * 
+ * 
+ */  
+
+
+                }
+/*
+.await on a future, you’re telling the runtime: “Drive this future until it’s finished, and don’t move on until it’s done.”
+
+For example:
+
+rust
+let result = some_future.await;
+Here, your code pauses until some_future completes.
+*/
+
+/*
+Production (main.rs) → .await the server → run forever, serving real users.
+
+Tests (spawn_app) → tokio::spawn(server) → run in background, test continues.
+
+Think of it like this:
+
+.await = “I’ll sit here and keep the shop open all day.”
+
+tokio::spawn = “I’ll hire someone to keep the shop open while I go check if the food tastes good.”
+*/
