@@ -39,3 +39,31 @@ Example: push to a Vec, change a field, etc.
 
 .into_inner() → consumes the RefCell and gives you the owned value back.
 Example: take the whole thing out when you’re done. */
+
+//CELL
+/*With Cell<T>, you can’t peek inside directly.
+You have to take the whole value out, work on it, then put it back.
+Example:
+
+rust
+let c = Cell::new(Vec::new());
+let mut temp = c.take(); // pull the Vec out
+temp.push(1);
+c.set(temp);             // put it back */
+
+//REFCELL
+/*RefCell<T>, you don’t need to pull the whole thing out.
+You can borrow a reference to the inside and work with it directly.
+Example:
+
+rust
+let r = RefCell::new(Vec::new());
+r.borrow_mut().push(1);  // directly mutate inside
+println!("{:?}", r.borrow()); // read inside
+
+
+Cell → you swap the whole Vec struct in/out.
+
+RefCell → you borrow a reference to the Vec struct and work directly with its pointer-managed heap data.
+
+*/
