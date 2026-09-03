@@ -14,14 +14,16 @@
 async fn health_check_works() {
     // Arrange  -> spawn_app piece is the only piece that will depend on our application code
     // spawn_app().await.expect("Failed to spawn our app.");
-    spawn_app();
+    let address = spawn_app();
     // We need to bring in `reqwest`
     // to perform HTTP requests against our application.
     let client = reqwest::Client::new();
 
     // Act
     let response = client
-        .get("http://127.0.0.1:8000/health_check")
+        // Use the returned application address
+        .get(&format!("{}/health_check", &address))
+        //.get("http://127.0.0.1:8000/health_check")
         .send()
         .await
         .expect("Failed to execute request.");
@@ -41,8 +43,16 @@ fn spawn_app() {
     //HttpServer::run() gives you a Server future that never resolves — it just keeps listening for requests.
     //.await it inside your test setup (spawn_app), the test runtime gets stuck forever and your assertions never run.
     // No .await, no .expect
+    let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind random port");
+    //bind ->Creates a socket: It asks the operating system for a TCP socket.,Associates it with an address,Reserves the port: Once bound, the socket is ready to listen for incoming connections.
 
-    let server = zero2prod::run().expect("Failed to bind address");
+    // We retrieve the port assigned to us by the OS
+    let port = listener.local_addr().unwrap().port();
+    ////: trying to bind port 0 will trigger an OS scan for an available port which will then be bound to the application
+    let server = zero2prod::run(
+        listener, //    "127.0.0.1:0" - this would cause issues so we resortrf to listen
+    )
+    .expect("Failed to bind address");
     // Launch the server as a background task
     // tokio::spawn returns a handle to the spawned future,
     // but we have no use for it here, hence the non-binding let
@@ -63,6 +73,7 @@ fn spawn_app() {
 
                                   If you had .awaited the server in a test, the runtime would never move past that line — your assertions would never run.
                                                                     */
+    format!("http://127.0.0.1:{}", port)
 }
 
 //we restrefactor our project into library and a binary: : all our logic will live in the library crate while the binary itself will be just an entrypoint with a very slim main function.
