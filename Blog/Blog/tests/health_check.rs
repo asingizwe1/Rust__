@@ -31,6 +31,60 @@ async fn health_check_works() {
     assert!(response.status().is_success());
     assert_eq!(Some(0), response.content_length());
 }
+
+#[tokio::test]
+async fn subscribe_returns_a_200_for_valid_form_data() {
+// Arrange
+let app_address = spawn_app();
+let client = reqwest::Client::new();
+// Act
+let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
+let response = client
+.post(&format!("{}/subscriptions", &app_address))
+.header("Content-Type", "application/x-www-form-urlencoded")
+.body(body)
+.send()
+.await
+.expect("Failed to execute request.");
+
+// Assert
+assert_eq!(200, response.status().as_u16());
+}
+
+#[tokio::test]
+//With parametrised tests it is important to have good error messages on failures: assertion failed on line XYZ is not great if you cannot tell which specific input is broken!
+//A parameterized test is basically one test that you run multiple times with different input values.
+//facilitated by the for loop in this case
+async fn subscribe_returns_a_400_when_data_is_missing() {
+// Arrange
+let app_address = spawn_app();
+let client = reqwest::Client::new();
+let test_cases = vec![
+("name=le%20guin", "missing the email"),
+("email=ursula_le_guin%40gmail.com", "missing the name"),
+("", "missing both name and email")
+];
+
+for (invalid_body, error_message) in test_cases {
+//"Take each test case and run the following test procedure using its values."
+// Act
+let response = client
+.post(&format!("{}/subscriptions", &app_address))
+.header("Content-Type", "application/x-www-form-urlencoded")
+.body(invalid_body)
+.send()
+.await
+.expect("Failed to execute request.");
+// Assert
+assert_eq!(
+400,
+response.status().as_u16(),
+// Additional customised error message on test failure
+"The API did not fail with 400 Bad Request when the payload was {}.",
+error_message
+);
+}
+}
 // Launch our application in the background ~somehow~
 // No .await call, therefore no need for `spawn_app` to be async now.
 // We are also running tests, so it is not worth it to propagate errors:
@@ -56,24 +110,74 @@ fn spawn_app() {
     // Launch the server as a background task
     // tokio::spawn returns a handle to the spawned future,
     // but we have no use for it here, hence the non-binding let
-    let _ = tokio::spawn(server); // runs the server in the background, so your test logic continues.
-                                  /*tokio::spawn takes a future and tells the Tokio runtime:
+    //let _ = tokio::spawn(server); // runs the server in the background, so your test logic continues.
+    /*tokio::spawn takes a future and tells the Tokio runtime:
 
-                                                                    “Run this future in the background, alongside other futures.”
+                                      “Run this future in the background, alongside other futures.”
 
-                                                                    It does not create a new OS thread. Instead, it schedules the future on Tokio’s async task system (like lightweight green threads).
-                                                                    //UNDERSTANDING
-                                                                     tests:
+                                      It does not create a new OS thread. Instead, it schedules the future on Tokio’s async task system (like lightweight green threads).
+                                      //UNDERSTANDING
+                                       tests:
 
-                                  You spawn the server future.
+    You spawn the server future.
 
-                                  The server starts listening.
+    The server starts listening.
 
-                                  Your test logic can continue: send HTTP requests, check responses, finish.
+    Your test logic can continue: send HTTP requests, check responses, finish.
 
-                                  If you had .awaited the server in a test, the runtime would never move past that line — your assertions would never run.
-                                                                    */
-    format!("http://127.0.0.1:{}", port)
+    If you had .awaited the server in a test, the runtime would never move past that line — your assertions would never run.
+                                      */
+    format!("http://127.0.0.1:{}", port);
+
+    //when using html forms we use application/x-www-form-urlencoded
+    async fn subscribe_returns_a_200_for_valid_form_data() {
+// Arrange
+let app_address = spawn_app();
+let client = reqwest::Client::new();
+// Act
+let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
+let response = client
+.post(&format!("{}/subscriptions", &app_address))
+.header("Content-Type", "application/x-www-form-urlencoded")
+.body(body)
+.send()
+.await
+.expect("Failed to execute request.");// Assert
+assert_eq!(200, response.status().as_u16());
+}
+
+#[tokio::test]
+async fn subscribe_returns_a_400_when_data_is_missing() {
+// Arrange
+let app_address = spawn_app();
+let client = reqwest::Client::new();
+let test_cases = vec![
+("name=le%20guin", "missing the email"),
+("email=ursula_le_guin%40gmail.com", "missing the name"),
+("", "missing both name and email")
+];
+for (invalid_body, error_message) in test_cases {
+// Act
+let response = client
+.post(&format!("{}/subscriptions", &app_address))
+.header("Content-Type", "application/x-www-form-urlencoded")
+.body(invalid_body)
+.send()
+.await
+.expect("Failed to execute request.");
+// Assert
+assert_eq!(
+400,
+response.status().as_u16(),
+// Additional customised error message on test failure
+"The API did not fail with 400 Bad Request when the payload was {}.",
+error_message
+);
+}
+}
+
+
+
 }
 
 //we restrefactor our project into library and a binary: : all our logic will live in the library crate while the binary itself will be just an entrypoint with a very slim main function.
